@@ -199,9 +199,13 @@ class Plugin::GVM < Msf::Plugin
     def cmd_gvm_target_create(*args)
       return unless gvm?
 
-      if args?(args, 3)
+      if args?(args, 4, 5)
         begin
-          resp = @gvm.target_create('name' => args[0], 'hosts' => args[1], 'comment' => args[2])
+          if args?(args, 4)
+            resp = @gvm.target_create('name' => args[0], 'hosts' => args[1], 'comment' => args[2], 'port_range' => args[3])
+          else
+            resp = @gvm.target_create('name' => args[0], 'hosts' => args[1], 'comment' => args[2], 'port_list' => args[4])
+          end
           print_status(resp)
           cmd_gvm_target_list
         rescue GVMGMP::GMPError => e
@@ -209,7 +213,9 @@ class Plugin::GVM < Msf::Plugin
         end
 
       else
-        print_status("Usage: gvm_target_create <name> <hosts> <comment>")
+        print_status("Usage:")
+        print_status("gvm_target_create <name> <hosts> <comment> <port_range>")
+        print_status("gvm_target_create <name> <hosts> <comment> 0 <port_list_id>")
       end
     end
 
