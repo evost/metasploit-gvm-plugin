@@ -507,7 +507,7 @@ class Plugin::GVM < Msf::Plugin
 
       if args?(args, 2)
         begin
-          report = @gvm.report_get_raw("report_id"=>args[0],"format"=>args[1])
+          report = @gvm.report_get_raw("report_id"=>args[0],"report_format_id"=>args[1], "details"=>"1")
           data = nil
           report.elements.each("//get_reports_response"){|r| data = r.to_s}
           print_status("Importing report to database.")
